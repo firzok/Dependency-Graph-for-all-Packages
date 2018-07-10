@@ -33,6 +33,6 @@ G.add_nodes_from(dependencies)
 for d in dependencies:
     G.add_edges_from([(packageName, d)])
 
-figure(num=None, figsize=(10, 10), dpi=150, facecolor='w', edgecolor='k')
+plt.figure(num=None, figsize=(10, 10), dpi=150, facecolor='w', edgecolor='k')
 nx.draw_circular(G, with_labels=True)
 plt.savefig('dependency_graph.png')
