@@ -11,7 +11,10 @@ with open(packageLockPath) as f:
         packageLockFile = json.load(f)
 
 dependencies = packageLockFile['dependencies']
+packageName = list(dependencies.keys())[0]
+fileName = 'dependency_graph_'+packageLockFile['name']+'.png'
 
+nodeName = packageName+'@'+dependencies[packageName]['version']
 def makeGraph(queue, graph):
     if (len(queue)) == 0:
         return
@@ -31,6 +34,16 @@ G = nx.DiGraph()
 q = deque([list(dependencies.keys())[0]])
 makeGraph(q, G)
 
-plt.figure(num=None, figsize=(10, 10), dpi=150, facecolor='w', edgecolor='k')
-nx.draw_spring(G, with_labels=True)
-plt.savefig('dependency_graph1.png')
+plt.figure(num=None, figsize=(20, 20), dpi=150, facecolor='w', edgecolor='k')
+pos = nx.circular_layout(G, scale=2)
+
+# pos = nx.spring_layout(G,pos=fixed_positions, fixed = fixed_nodes)
+
+pos[nodeName] = [0, 0]
+
+
+nx.draw_networkx(G, pos, with_labels=True, arrowstyle = 'simple', arrowsize = 10, node_size = 700,
+               node_color=np.arange(0, len(G.nodes())), node_shape = 'h', alpha = 1,
+              edge_color = 'green', font_color ='red', scale = 15, font_weight = 'heavy')
+
+plt.savefig(fileName)
